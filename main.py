@@ -1,22 +1,44 @@
-import time, sys, math, bitarray, base64, zlib
+import time
+import sys
+import math
+import bitarray
+import base64
+import zlib
 
 
-def findIndex(s):
-    n = (s + 1) // 6
-    if (s > n * 6):
-        return (n << 1) - 1
-    return (n << 1) - 2
+def find_next(p, sqrt, a, u):
+    while p < u and a[p] == 1:
+        p += 1
+
+    if p < u:
+        p += 1
+        k = 3 * p + 1
+        if k % 2 == 0:
+            k += 1
+        d = (p << 1) + 1
+        i = int(round(k * (5.0 / 6.0)))
+        i1 = (6 * i) - 1
+        i2 = i1 + 2
+        s = (i << 1) - 1
+        if i1 % k == 0:
+            s -= 1
+        del i, i1, i2
+        return k, d, s, p
+    return sqrt, sqrt, sqrt, p
 
 
-def n_primi8(n):
+if __name__ == "__main__":
+    n = 100000000
+    if len(sys.argv) > 1:
+        n = int(sys.argv[1])
+
     start = time.time()
 
     sys.stdout.write("Array... "), sys.stdout.flush()
-    u = n // 3
+    u = n // 3 + 1
     a = bitarray.bitarray(u)
     a.setall(False)
     sys.stdout.write("done\n")
-    itertot = 0
     sys.stdout.write("5, 7, 11, 13, 17, 19, 23, 29... "), sys.stdout.flush()
     iter = 0
     mi, i = 7, 1
@@ -35,7 +57,7 @@ def n_primi8(n):
                     a[mi] = 1
                     a[mi + 3] = 1
                     mi += 10
-            except:
+            except IndexError:
                 i = False
                 del mi
         # Multipli di 7
@@ -45,7 +67,7 @@ def n_primi8(n):
                     a[mj] = 1
                     a[mj + 5] = 1
                     mj += 14
-            except:
+            except IndexError:
                 j = False
                 del mj
         # Multipli di 11
@@ -55,7 +77,7 @@ def n_primi8(n):
                     a[mk] = 1
                     a[mk + 7] = 1
                     mk += 22
-            except:
+            except IndexError:
                 k = False
                 del mk
         # Multipli di 13
@@ -65,7 +87,7 @@ def n_primi8(n):
                     a[mh] = 1
                     a[mh + 9] = 1
                     mh += 26
-            except:
+            except IndexError:
                 h = False
                 del mh
         # Multipli di 17
@@ -75,7 +97,7 @@ def n_primi8(n):
                     a[mp] = 1
                     a[mp + 11] = 1
                     mp += 34
-            except:
+            except IndexError:
                 p = False
                 del mp
         # Multipli di 19
@@ -85,7 +107,7 @@ def n_primi8(n):
                     a[ml] = 1
                     a[ml + 13] = 1
                     ml += 38
-            except:
+            except IndexError:
                 l = False
                 del ml
         # Multipli di 23
@@ -95,7 +117,7 @@ def n_primi8(n):
                     a[mr] = 1
                     a[mr + 15] = 1
                     mr += 46
-            except:
+            except IndexError:
                 r = False
                 del mr
         # Multipli di 29
@@ -105,180 +127,190 @@ def n_primi8(n):
                     a[mo] = 1
                     a[mo + 19] = 1
                     mo += 58
-            except:
+            except IndexError:
                 o = False
                 del mo
         iter += 1
     del i, j, k, h, p, l, r, o
     sys.stdout.write("done (%d)\n" % iter)
 
-    itertot += iter
+    sqrt = int(round(math.sqrt(n))) + 1
+    usqrt = sqrt // 3 + 1
 
     k = 31
     d = 21
-    p = 10
-    sqrt = int(math.sqrt(n)) + 1
+    s = 50
 
-    while k < sqrt:
-        iter = 0
-        while k < sqrt and a[findIndex(k)] != 0:
-            d += 2
-            p += 1
-            k = int(3 * p + 1.5)
-            if k % 2 == 0:
-                k += 1
-            iter += 1
+    k2 = 37
+    d2 = 25
+    s2 = 60
 
-        if k < sqrt:
-            i = int(round((k * 5) / 6.0))
-            i1 = (6 * i) - 1
-            i2 = (6 * i) + 1
-            if i1 % k == 0:
-                s = findIndex(i1)
+    k3 = 41
+    d3 = 27
+    s3 = 67
+
+    p = 13
+
+    while s3 != u and s2 != u and s != u:
+        try:
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+        except IndexError:
+            k3o = k3
+            po = p+1
+            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k3 >= sqrt:
+                print("%d... done" % k3o)
+                s3 = u
             else:
-                s = findIndex(i2)
-            del i, i1, i2
+                print("%d -> %d" % (k3o, k3))
+                a[s3] = 1
+                a[s3 + d3] = 1
+                s3 += k3 << 1
+            del k3o, po
 
-            d2 = d + 2
-            p += 1
-            k2 = int(3 * p + 1.5)
-            if k2 % 2 == 0:
-                k2 += 1
-            while k2 < sqrt and a[findIndex(k2)] != 0:
-                d2 += 2
-                p += 1
-                k2 = int(3 * p + 1.5)
-                if k2 % 2 == 0:
-                    k2 += 1
-                iter += 1
-
-            if k2 < sqrt:
-                ii = int(round((k2 * 5) / 6.0))
-                ii1 = (6 * ii) - 1
-                ii2 = (6 * ii) + 1
-                if ii1 % k2 == 0:
-                    s2 = findIndex(ii1)
-                else:
-                    s2 = findIndex(ii2)
-                del ii, ii1, ii2
-
-                d3 = d2 + 2
-                p += 1
-                k3 = int(3 * p + 1.5)
-                if k3 % 2 == 0:
-                    k3 += 1
-                while k3 < sqrt and a[findIndex(k3)] != 0:
-                    d3 += 2
-                    p += 1
-                    k3 = int(3 * p + 1.5)
-                    if k3 % 2 == 0:
-                        k3 += 1
-                    iter += 1
-
-                if k3 < sqrt:
-                    sys.stdout.write(str(k) + ", " + str(k2) + ", " + str(k3) + "... "), sys.stdout.flush()
-                    iii = int(round((k3 * 5) / 6.0))
-                    iii1 = (6 * iii) - 1
-                    iii2 = (6 * iii) + 1
-                    if iii1 % k3 == 0:
-                        s3 = findIndex(iii1)
-                    else:
-                        s3 = findIndex(iii2)
-                    del iii, iii1, iii2
-
-                    while s3 < u:
-                        a[s3] = 1
-                        a[s2] = 1
-                        a[s] = 1
-                        if s3 + d3 < u:
-                            a[s3 + d3] = 1
-                            a[s2 + d2] = 1
-                            a[s + d] = 1
-                        elif s2 + d2 < u:
-                            a[s2 + d2] = 1
-                            a[s + d] = 1
-                        elif s + d < u:
-                            a[s + d] = 1
-                        s += k << 1
-                        s2 += k2 << 1
-                        s3 += k3 << 1
-                        iter += 1
-
-                    del s3
-
-                    while s2 < u:
-                        a[s2] = 1
-                        a[s] = 1
-                        if s2 + d2 < u:
-                            a[s2 + d2] = 1
-                            a[s + d] = 1
-                        elif s + d < u:
-                            a[s + d] = 1
-                        s += k << 1
-                        s2 += k2 << 1
-                        iter += 1
-
-                    del s2
-
-                    while s < u:
-                        a[s] = 1
-                        if s + d < u:
-                            a[s + d] = 1
-                        s += k << 1
-                        iter += 1
-
-                    del s
-                    d = d3 + 2
-                    sys.stdout.write("done (%d)\n" % iter)
-
-                else:
-                    sys.stdout.write(str(k) + ", " + str(k2) + "... "), sys.stdout.flush()
-
-                    while s2 < u:
-                        a[s2] = 1
-                        a[s] = 1
-                        if s2 + d2 < u:
-                            a[s2 + d2] = 1
-                            a[s + d] = 1
-                        elif s + d < u:
-                            a[s + d] = 1
-                        s += k << 1
-                        s2 += k2 << 1
-                        iter += 1
-
-                    del s2
-
-                    while s < u:
-                        a[s] = 1
-                        if s + d < u:
-                            a[s + d] = 1
-                        s += k << 1
-                        iter += 1
-
-                    del s
-                    d = d2 + 2
-                    sys.stdout.write("done (%d)\n" % iter)
-
+        try:
+            a[s2] = 1
+            a[s2 + d2] = 1
+            s2 += k2 << 1
+            a[s2] = 1
+            a[s2 + d2] = 1
+            s2 += k2 << 1
+        except IndexError:
+            k2o = k2
+            po = p + 1
+            k2, d2, s2, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k2 >= sqrt:
+                print("%d... done" % k2o)
+                s2 = u
             else:
-                sys.stdout.write(str(k) + "... "), sys.stdout.flush()
+                print("%d -> %d" % (k2o, k2))
+                a[s2] = 1
+                a[s2 + d2] = 1
+                s2 += k2 << 1
+            del k2o, po
 
-                while s < u:
-                    a[s] = 1
-                    if s + d < u:
-                        a[s + d] = 1
-                    s += k << 1
-                    iter += 1
+        try:
+            a[s] = 1
+            a[s + d] = 1
+            s += k << 1
+            a[s] = 1
+            a[s + d] = 1
+            s += k << 1
+        except IndexError:
+            ko = k
+            po = p + 1
+            k, d, s, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k >= sqrt:
+                print("%d... done" % ko)
+                s = u
+            else:
+                print("%d -> %d" % (ko, k))
+                a[s] = 1
+                a[s + d] = 1
+                s += k << 1
+            del ko, po
+        iter += 1
 
-                del s
-                sys.stdout.write("done (%d)\n" % iter)
+    if s3 == u:
+        s3 = s2
+        d3 = d2
+        k3 = k2
+        s2 = s
+        d2 = d
+        k2 = k
+    elif s2 == u:
+        s2 = s
+        d2 = d
+        k2 = k
+    del s, d, k
 
-        itertot += iter
-        p += 1
-        k = int(3 * p + 1.5)
-        if k % 2 == 0:
-            k += 1
+    while s3 != u and s2 != u:
+        try:
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+        except IndexError:
+            k3o = k3
+            po = p + 1
+            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k3 >= sqrt:
+                print("%d... done" % k3o)
+                s3 = u
+            else:
+                print("%d -> %d" % (k3o, k3))
+                a[s3] = 1
+                a[s3 + d3] = 1
+                s3 += k3 << 1
+            del k3o, po
 
-    print("\n%15d %5.5f %20d\n" % (n, time.time() - start, itertot))
+        try:
+            a[s2] = 1
+            a[s2 + d2] = 1
+            s2 += k2 << 1
+            a[s2] = 1
+            a[s2 + d2] = 1
+            s2 += k2 << 1
+        except IndexError:
+            k2o = k2
+            po = p + 1
+            k2, d2, s2, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k2 >= sqrt:
+                print("%d... done" % k2o)
+                s2 = u
+            else:
+                print("%d -> %d" % (k2o, k2))
+                a[s2] = 1
+                a[s2 + d2] = 1
+                s2 += k2 << 1
+            del k2o, po
+        iter += 1
+
+    if s2 != u and s3 == u:
+        s3 = s2
+        d3 = d2
+        k3 = k2
+    del s2, d2, k2
+
+    while s3 != u:
+        try:
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+            a[s3] = 1
+            a[s3 + d3] = 1
+            s3 += k3 << 1
+        except IndexError:
+            k3o = k3
+            po = p + 1
+            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
+            iter += p - po
+            if k3 >= sqrt:
+                print("%d... done" % k3o)
+                s3 = u
+            else:
+                print("%d -> %d" % (k3o, k3))
+                a[s3] = 1
+                a[s3 + d3] = 1
+                s3 += k3 << 1
+            del k3o, po
+        iter += 1
+
+    del s3, d3, k3
+
+    print("\n%15d %5.5f %20d\n" % (n, time.time() - start, iter))
 
     sys.stdout.write("Scrittura... "), sys.stdout.flush()
     s = 1
@@ -311,9 +343,9 @@ def n_primi8(n):
 
     sys.stdout.write("Compressione... "), sys.stdout.flush()
     gb = (s // 536870912) + 1
+    compress = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, 15)
     out = open("soluz2.txt", "w")
     if gb == 1:
-        compress = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, 15)
         a = compress.compress((open("soluz.txt", "r").read()).encode()) + compress.flush()
         out.write("1\n" + base64.b64encode(a).decode())
     else:
@@ -323,8 +355,7 @@ def n_primi8(n):
         for i in range(gb - 1):
             st = ""
             for j in range(div):
-                st += inp.readline()
-            compress = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, 15)
+                st += inp.readlines(div)
             out.write(base64.b64encode(compress.compress(st.replace("\n", ",").encode()) + compress.flush()).decode() + "\n")
 
         st = ""
@@ -332,12 +363,5 @@ def n_primi8(n):
         while a != "":
             st += a
             a = inp.readline()
-        compress = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, 15)
         out.write(base64.b64encode(compress.compress(st.replace("\n", ",").encode()) + compress.flush()).decode() + "\n")
     sys.stdout.write("done\n")
-
-
-if len(sys.argv) > 1:
-    n_primi8(int(sys.argv[1]))
-else:
-    n_primi8(100000000)
