@@ -6,8 +6,18 @@ import base64
 import zlib
 
 
+def find_index(n):
+    last = str(n)[-1]
+    if last in ['7', '0']:
+        return 12
+    i = n // 10
+    if n - (i * 10) < 7:
+        return n - ((i << 1) + 1)
+    return n - ((i+1) << 1)
+
+
 def find_next(p, sqrt, a, u):
-    while p < u and a[p] == 1:
+    while p < u and a[find_index(p)] == 1:
         p += 1
 
     if p < u:
@@ -28,6 +38,7 @@ def find_next(p, sqrt, a, u):
 
 
 if __name__ == "__main__":
+    print(find_index(19))
     n = 100000000
     if len(sys.argv) > 1:
         n = int(sys.argv[1])
@@ -35,13 +46,14 @@ if __name__ == "__main__":
     start = time.time()
 
     sys.stdout.write("Array... "), sys.stdout.flush()
-    u = n // 3 + 1
+    u = ((n << 2) // 15) + 1
     a = bitarray.bitarray(u)
     a.setall(False)
     sys.stdout.write("done\n")
-    sys.stdout.write("5, 7, 11, 13, 17, 19, 23, 29... "), sys.stdout.flush()
+
+    sys.stdout.write("7, 11, 13, 17, 19, 23, 29... "), sys.stdout.flush()
     iter = 0
-    mi, i = 7, 1
+
     mj, j = 10, 1
     mk, k = 17, 1
     mh, h = 20, 1
@@ -49,23 +61,13 @@ if __name__ == "__main__":
     ml, l = 30, 1
     mr, r = 37, 1
     mo, o = 47, 1
-    while i or j or k or h or p or l or r or o:
-        # Multipli di 5
-        if i:
-            try:
-                for y in range(18):
-                    a[mi] = 1
-                    a[mi + 3] = 1
-                    mi += 10
-            except IndexError:
-                i = False
-                del mi
+    while j or k or h or p or l or r or o:
         # Multipli di 7
         if j:
             try:
                 for y in range(13):
-                    a[mj] = 1
-                    a[mj + 5] = 1
+                    a[find_index(mj)] = 1
+                    a[find_index(mj + 5)] = 1
                     mj += 14
             except IndexError:
                 j = False
@@ -74,8 +76,8 @@ if __name__ == "__main__":
         if k:
             try:
                 for y in range(8):
-                    a[mk] = 1
-                    a[mk + 7] = 1
+                    a[find_index(mk)] = 1
+                    a[find_index(mk + 7)] = 1
                     mk += 22
             except IndexError:
                 k = False
@@ -84,8 +86,8 @@ if __name__ == "__main__":
         if h:
             try:
                 for y in range(7):
-                    a[mh] = 1
-                    a[mh + 9] = 1
+                    a[find_index(mh)] = 1
+                    a[find_index(mh + 9)] = 1
                     mh += 26
             except IndexError:
                 h = False
@@ -94,8 +96,8 @@ if __name__ == "__main__":
         if p:
             try:
                 for y in range(6):
-                    a[mp] = 1
-                    a[mp + 11] = 1
+                    a[find_index(mp)] = 1
+                    a[find_index(mp + 11)] = 1
                     mp += 34
             except IndexError:
                 p = False
@@ -104,8 +106,8 @@ if __name__ == "__main__":
         if l:
             try:
                 for y in range(5):
-                    a[ml] = 1
-                    a[ml + 13] = 1
+                    a[find_index(ml)] = 1
+                    a[find_index(ml + 13)] = 1
                     ml += 38
             except IndexError:
                 l = False
@@ -114,8 +116,8 @@ if __name__ == "__main__":
         if r:
             try:
                 for y in range(4):
-                    a[mr] = 1
-                    a[mr + 15] = 1
+                    a[find_index(mr)] = 1
+                    a[find_index(mr + 15)] = 1
                     mr += 46
             except IndexError:
                 r = False
@@ -124,14 +126,14 @@ if __name__ == "__main__":
         if o:
             try:
                 for y in range(3):
-                    a[mo] = 1
-                    a[mo + 19] = 1
+                    a[find_index(mo)] = 1
+                    a[find_index(mo + 19)] = 1
                     mo += 58
             except IndexError:
                 o = False
                 del mo
         iter += 1
-    del i, j, k, h, p, l, r, o
+    del j, k, h, p, l, r, o
     sys.stdout.write("done (%d)\n" % iter)
 
     sqrt = int(round(math.sqrt(n))) + 1
@@ -153,15 +155,15 @@ if __name__ == "__main__":
 
     while s3 != u and s2 != u and s != u:
         try:
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
         except IndexError:
             k3o = k3
-            po = p+1
+            po = p + 1
             k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
             iter += p - po
             if k3 >= sqrt:
@@ -169,17 +171,17 @@ if __name__ == "__main__":
                 s3 = u
             else:
                 print("%d -> %d" % (k3o, k3))
-                a[s3] = 1
-                a[s3 + d3] = 1
+                a[find_index(s3)] = 1
+                a[find_index(s3 + d3)] = 1
                 s3 += k3 << 1
             del k3o, po
 
         try:
-            a[s2] = 1
-            a[s2 + d2] = 1
+            a[find_index(s2)] = 1
+            a[find_index(s2 + d2)] = 1
             s2 += k2 << 1
-            a[s2] = 1
-            a[s2 + d2] = 1
+            a[find_index(s2)] = 1
+            a[find_index(s2 + d2)] = 1
             s2 += k2 << 1
         except IndexError:
             k2o = k2
@@ -191,17 +193,17 @@ if __name__ == "__main__":
                 s2 = u
             else:
                 print("%d -> %d" % (k2o, k2))
-                a[s2] = 1
-                a[s2 + d2] = 1
+                a[find_index(s2)] = 1
+                a[find_index(s2 + d2)] = 1
                 s2 += k2 << 1
             del k2o, po
 
         try:
-            a[s] = 1
-            a[s + d] = 1
+            a[find_index(s)] = 1
+            a[find_index(s + d)] = 1
             s += k << 1
-            a[s] = 1
-            a[s + d] = 1
+            a[find_index(s)] = 1
+            a[find_index(s + d)] = 1
             s += k << 1
         except IndexError:
             ko = k
@@ -213,8 +215,8 @@ if __name__ == "__main__":
                 s = u
             else:
                 print("%d -> %d" % (ko, k))
-                a[s] = 1
-                a[s + d] = 1
+                a[find_index(s)] = 1
+                a[find_index(s + d)] = 1
                 s += k << 1
             del ko, po
         iter += 1
@@ -234,11 +236,11 @@ if __name__ == "__main__":
 
     while s3 != u and s2 != u:
         try:
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
         except IndexError:
             k3o = k3
@@ -250,17 +252,17 @@ if __name__ == "__main__":
                 s3 = u
             else:
                 print("%d -> %d" % (k3o, k3))
-                a[s3] = 1
-                a[s3 + d3] = 1
+                a[find_index(s3)] = 1
+                a[find_index(s3 + d3)] = 1
                 s3 += k3 << 1
             del k3o, po
 
         try:
-            a[s2] = 1
-            a[s2 + d2] = 1
+            a[find_index(s2)] = 1
+            a[find_index(s2 + d2)] = 1
             s2 += k2 << 1
-            a[s2] = 1
-            a[s2 + d2] = 1
+            a[find_index(s2)] = 1
+            a[find_index(s2 + d2)] = 1
             s2 += k2 << 1
         except IndexError:
             k2o = k2
@@ -272,8 +274,8 @@ if __name__ == "__main__":
                 s2 = u
             else:
                 print("%d -> %d" % (k2o, k2))
-                a[s2] = 1
-                a[s2 + d2] = 1
+                a[find_index(s2)] = 1
+                a[find_index(s2 + d2)] = 1
                 s2 += k2 << 1
             del k2o, po
         iter += 1
@@ -286,11 +288,11 @@ if __name__ == "__main__":
 
     while s3 != u:
         try:
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
-            a[s3] = 1
-            a[s3 + d3] = 1
+            a[find_index(s3)] = 1
+            a[find_index(s3 + d3)] = 1
             s3 += k3 << 1
         except IndexError:
             k3o = k3
@@ -302,8 +304,8 @@ if __name__ == "__main__":
                 s3 = u
             else:
                 print("%d -> %d" % (k3o, k3))
-                a[s3] = 1
-                a[s3 + d3] = 1
+                a[find_index(s3)] = 1
+                a[find_index(s3 + d3)] = 1
                 s3 += k3 << 1
             del k3o, po
         iter += 1
@@ -314,6 +316,7 @@ if __name__ == "__main__":
 
     sys.stdout.write("Scrittura... "), sys.stdout.flush()
     s = 1
+    tot = 3
     out = open("soluz.txt", "w")
     cont1 = 0
     cont0 = 0
@@ -329,9 +332,9 @@ if __name__ == "__main__":
             if cont0 == 0:
                 out.write(str(cont1) + "\n")
                 s += 1
+                tot += cont1
                 cont1 = 0
             cont0 += 1
-
     if cont0 == 0:
         out.write(str(cont1))
     if cont0 == 1:
@@ -340,6 +343,8 @@ if __name__ == "__main__":
     del n, cont0, cont1
     del a
     sys.stdout.write("done\n")
+
+    print("\t %d" % tot)
 
     sys.stdout.write("Compressione... "), sys.stdout.flush()
     gb = (s // 536870912) + 1
