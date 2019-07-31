@@ -6,313 +6,277 @@ import base64
 import zlib
 
 
-def find_index(n):
-    last = str(n)[-1]
-    if last in ['7', '0']:
-        return 12
-    i = n // 10
-    if n - (i * 10) < 7:
-        return n - ((i << 1) + 1)
-    return n - ((i+1) << 1)
-
-
-def find_next(p, sqrt, a, u):
-    while p < u and a[find_index(p)] == 1:
-        p += 1
-
-    if p < u:
-        p += 1
-        k = 3 * p + 1
-        if k % 2 == 0:
-            k += 1
-        d = (p << 1) + 1
-        i = int(round(k * (5.0 / 6.0)))
-        i1 = (6 * i) - 1
-        i2 = i1 + 2
-        s = (i << 1) - 1
-        if i1 % k == 0:
-            s -= 1
-        del i, i1, i2
-        return k, d, s, p
-    return sqrt, sqrt, sqrt, p
+def find_value(i, a4, a5, a7):
+    k = int(round(i))
+    if a4 == 0 or a5 == 0 or a7 == 0:
+        k -= 2
+    if k % 2 == 0:
+        k += 1
+    return k
 
 
 if __name__ == "__main__":
-    print(find_index(19))
-    n = 100000000
-    if len(sys.argv) > 1:
-        n = int(sys.argv[1])
+    const = 3.749999999999999
 
-    start = time.time()
+    try:
+        u = int(sys.argv[1])
+    except IndexError:
+        u = 100000
 
     sys.stdout.write("Array... "), sys.stdout.flush()
-    u = ((n << 2) // 15) + 1
-    a = bitarray.bitarray(u)
-    a.setall(False)
+    n = int((u << 2)/15.0) + 1
+    a = bitarray.bitarray(n)
+    a.setall(0)
     sys.stdout.write("done\n")
 
-    sys.stdout.write("7, 11, 13, 17, 19, 23, 29... "), sys.stdout.flush()
-    iter = 0
+    iter_tot = 0
+    start = time.time()
 
-    mj, j = 10, 1
-    mk, k = 17, 1
-    mh, h = 20, 1
-    mp, p = 27, 1
-    ml, l = 30, 1
-    mr, r = 37, 1
-    mo, o = 47, 1
-    while j or k or h or p or l or r or o:
-        # Multipli di 7
-        if j:
+    s7, i7 = 0, 1
+    s11, i11 = 1, 1
+    s13, i13 = 2, 1
+    s17, i17 = 3, 1
+    s19, i19 = 4, 1
+    s23, i23 = 5, 1
+    s29, i29 = 6, 1
+    s31, i31 = 7, 1
+
+    sys.stdout.write("7, 11, 13, 17, 23, 29, 31... "), sys.stdout.flush()
+    while i7 or i11 or i13 or i17 or i23 or i29 or i31:
+        if i7:                                                                                                                                                                                                                                                                                                                                       
             try:
-                for y in range(13):
-                    a[find_index(mj)] = 1
-                    a[find_index(mj + 5)] = 1
-                    mj += 14
+                for i in range(18):
+                    a[s7+12] = 1
+                    a[s7+19] = 1
+                    a[s7+23] = 1
+                    a[s7+30] = 1
+                    a[s7+34] = 1
+                    a[s7+41] = 1
+                    a[s7+53] = 1
+                    a[s7+56] = 1
+                    s7 += 56
             except IndexError:
-                j = False
-                del mj
-        # Multipli di 11
-        if k:
+                del s7
+                i7 = 0
+        if i11:
             try:
-                for y in range(8):
-                    a[find_index(mk)] = 1
-                    a[find_index(mk + 7)] = 1
-                    mk += 22
+                for i in range(12):
+                    a[s11+18] = 1
+                    a[s11+30] = 1
+                    a[s11+36] = 1
+                    a[s11+47] = 1
+                    a[s11+53] = 1
+                    a[s11+65] = 1
+                    a[s11+83] = 1
+                    a[s11+88] = 1
+                    s11 += 88
             except IndexError:
-                k = False
-                del mk
-        # Multipli di 13
-        if h:
+                del s11
+                i11 = 0
+        if i13:
             try:
-                for y in range(7):
-                    a[find_index(mh)] = 1
-                    a[find_index(mh + 9)] = 1
-                    mh += 26
+                for i in range(10):
+                    a[s13+21] = 1
+                    a[s13+35] = 1
+                    a[s13+42] = 1
+                    a[s13+55] = 1
+                    a[s13+62] = 1
+                    a[s13+76] = 1
+                    a[s13+97] = 1
+                    a[s13+104] = 1
+                    s13 += 104
             except IndexError:
-                h = False
-                del mh
-        # Multipli di 17
-        if p:
+                del s13
+                i13 = 0
+        if i17:
             try:
-                for y in range(6):
-                    a[find_index(mp)] = 1
-                    a[find_index(mp + 11)] = 1
-                    mp += 34
+                for i in range(8):
+                    a[s17+27] = 1
+                    a[s17+45] = 1
+                    a[s17+54] = 1
+                    a[s17+73] = 1
+                    a[s17+82] = 1
+                    a[s17+100] = 1
+                    a[s17+127] = 1
+                    a[s17+136] = 1
+                    s17 += 136
             except IndexError:
-                p = False
-                del mp
-        # Multipli di 19
-        if l:
+                del s17
+                i17 = 0
+        if i19:
             try:
-                for y in range(5):
-                    a[find_index(ml)] = 1
-                    a[find_index(ml + 13)] = 1
-                    ml += 38
+                for i in range(7):
+                    a[s19+30] = 1
+                    a[s19+50] = 1
+                    a[s19+60] = 1
+                    a[s19+81] = 1
+                    a[s19+91] = 1
+                    a[s19+111] = 1
+                    a[s19+141] = 1
+                    a[s19+152] = 1
+                    s19 += 152
             except IndexError:
-                l = False
-                del ml
-        # Multipli di 23
-        if r:
+                del s19
+                i19 = 0
+        if i23:
             try:
-                for y in range(4):
-                    a[find_index(mr)] = 1
-                    a[find_index(mr + 15)] = 1
-                    mr += 46
+                for i in range(6):
+                    a[s23+36] = 1
+                    a[s23+61] = 1
+                    a[s23+73] = 1
+                    a[s23+98] = 1
+                    a[s23+110] = 1
+                    a[s23+135] = 1
+                    a[s23+171] = 1
+                    a[s23+184] = 1
+                    s23 += 184
             except IndexError:
-                r = False
-                del mr
-        # Multipli di 29
-        if o:
+                del s23
+                i23 = 0
+        if i29:
             try:
-                for y in range(3):
-                    a[find_index(mo)] = 1
-                    a[find_index(mo + 19)] = 1
-                    mo += 58
+                for i in range(5):
+                    a[s29+47] = 1
+                    a[s29+78] = 1
+                    a[s29+93] = 1
+                    a[s29+124] = 1
+                    a[s29+139] = 1
+                    a[s29+170] = 1
+                    a[s29+217] = 1
+                    a[s29+232] = 1
+                    s29 += 232
             except IndexError:
-                o = False
-                del mo
-        iter += 1
-    del j, k, h, p, l, r, o
-    sys.stdout.write("done (%d)\n" % iter)
+                del s29
+                i29 = 0
+        if i31:
+            try:
+                for i in range(4):
+                    a[s31+49] = 1
+                    a[s31+82] = 1
+                    a[s31+99] = 1
+                    a[s31+132] = 1
+                    a[s31+149] = 1
+                    a[s31+182] = 1
+                    a[s31+231] = 1
+                    a[s31+248] = 1
+                    s31 += 248
+            except IndexError:
+                del s31
+                i31 = 0
+        iter_tot += 1
+    del i7, i11, i13, i17, i19, i23, i29, i31
+    sys.stdout.write("done (%d)\n" % iter_tot)
 
-    sqrt = int(round(math.sqrt(n))) + 1
-    usqrt = sqrt // 3 + 1
+    sqtn = int(round(math.sqrt(u)))
+    sqt = ((sqtn << 2) / 15.0) - 1
+    
+    k = 37
+    r4 = 4
+    r5 = 3
+    r7 = 1
+    i = 8
+    il = 0
+    inter = 6
 
-    k = 31
-    d = 21
-    s = 50
+    while k < sqtn:
+        sys.stdout.write("%d... " % k), sys.stdout.flush()
+        n_iter = 0
+        data = [round(k * 1.6), round((k << 3) / 3.0), round(k * 3.2), round(k * (704.0 / 165.0)), round(k * 4.8),
+                round(k * (968.0 / 165.0)), round(k * (24673.0 / 3300.0)), k << 3]
+        err = True
+        for l in range(8):
+            pos = data[l] + i
+            inte = const*pos + 6
+            res4 = (pos - 4) % 8
+            res5 = (pos - 5) % 8
+            res7 = (pos - 7) % 8
+            j = find_value(inte, res4, res5, res7)
 
-    k2 = 37
-    d2 = 25
-    s2 = 60
+            if j % k != 0:
+                intep = inte + const
+                jp = find_value(intep, (res4 + 1) % 8, (res5 + 1) % 8, (res7 + 1) % 8)
 
-    k3 = 41
-    d3 = 27
-    s3 = 67
+                intel = inte - const
+                jl = find_value(intel, (res4 - 1) % 8, (res5 - 1) % 8, (res7 - 1) % 8)
 
-    p = 13
+                if jl % k == 0:
+                    data[l] -= 1
+                elif jp % k == 0:
+                    data[l] += 1
+                else:
+                    n_iter = 0
+                    st = True
+                    sp = int(round(k/100.0)) - 3 
+                    intep += (sp-1)*const
+                    res4p = (res4 + sp) % 8
+                    res5p = (res5 + sp) % 8
+                    res7p = (res7 + sp) % 8
 
-    while s3 != u and s2 != u and s != u:
-        try:
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-        except IndexError:
-            k3o = k3
-            po = p + 1
-            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k3 >= sqrt:
-                print("%d... done" % k3o)
-                s3 = u
-            else:
-                print("%d -> %d" % (k3o, k3))
-                a[find_index(s3)] = 1
-                a[find_index(s3 + d3)] = 1
-                s3 += k3 << 1
-            del k3o, po
+                    intel -= (sp-1)*const
+                    res4l = (res4 - sp) % 8
+                    res5l = (res5 - sp) % 8
+                    res7l = (res7 - sp) % 8
 
-        try:
-            a[find_index(s2)] = 1
-            a[find_index(s2 + d2)] = 1
-            s2 += k2 << 1
-            a[find_index(s2)] = 1
-            a[find_index(s2 + d2)] = 1
-            s2 += k2 << 1
-        except IndexError:
-            k2o = k2
-            po = p + 1
-            k2, d2, s2, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k2 >= sqrt:
-                print("%d... done" % k2o)
-                s2 = u
-            else:
-                print("%d -> %d" % (k2o, k2))
-                a[find_index(s2)] = 1
-                a[find_index(s2 + d2)] = 1
-                s2 += k2 << 1
-            del k2o, po
+                    while st:
+                        jp = find_value(intep, res4p, res5p, res7p)
 
-        try:
-            a[find_index(s)] = 1
-            a[find_index(s + d)] = 1
-            s += k << 1
-            a[find_index(s)] = 1
-            a[find_index(s + d)] = 1
-            s += k << 1
-        except IndexError:
-            ko = k
-            po = p + 1
-            k, d, s, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k >= sqrt:
-                print("%d... done" % ko)
-                s = u
-            else:
-                print("%d -> %d" % (ko, k))
-                a[find_index(s)] = 1
-                a[find_index(s + d)] = 1
-                s += k << 1
-            del ko, po
-        iter += 1
+                        jl = find_value(intel, res4l, res5l, res7l)
 
-    if s3 == u:
-        s3 = s2
-        d3 = d2
-        k3 = k2
-        s2 = s
-        d2 = d
-        k2 = k
-    elif s2 == u:
-        s2 = s
-        d2 = d
-        k2 = k
-    del s, d, k
+                        if jl % k == 0:
+                            st = False
+                            data[l] -= sp
+                        elif jp % k == 0:
+                            st = False
+                            data[l] += sp
+                        else:
+                            sp += 1
+                            intep += const
+                            res4p = (res4p + 1) % 8
+                            res5p = (res5p + 1) % 8
+                            res7p = (res7p + 1) % 8
 
-    while s3 != u and s2 != u:
-        try:
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-        except IndexError:
-            k3o = k3
-            po = p + 1
-            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k3 >= sqrt:
-                print("%d... done" % k3o)
-                s3 = u
-            else:
-                print("%d -> %d" % (k3o, k3))
-                a[find_index(s3)] = 1
-                a[find_index(s3 + d3)] = 1
-                s3 += k3 << 1
-            del k3o, po
+                            intel -= const
+                            res4l = (res4l - 1) % 8
+                            res5l = (res5l - 1) % 8
+                            res7l = (res7l - 1) % 8
+                        n_iter += 1
+            try:
+                a[data[l]+i] = 1
+            except IndexError:
+                err = False
+        
+        if err:
+            s = i + data[7]
+            state = True
+            while state:
+                try:
+                    n_iter += 1
+                    for add in data:
+                        a[s+add] = 1
+                    s += data[-1]
+                except IndexError:
+                    state = False
 
-        try:
-            a[find_index(s2)] = 1
-            a[find_index(s2 + d2)] = 1
-            s2 += k2 << 1
-            a[find_index(s2)] = 1
-            a[find_index(s2 + d2)] = 1
-            s2 += k2 << 1
-        except IndexError:
-            k2o = k2
-            po = p + 1
-            k2, d2, s2, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k2 >= sqrt:
-                print("%d... done" % k2o)
-                s2 = u
-            else:
-                print("%d -> %d" % (k2o, k2))
-                a[find_index(s2)] = 1
-                a[find_index(s2 + d2)] = 1
-                s2 += k2 << 1
-            del k2o, po
-        iter += 1
+        i += 1
+        while i < sqt and a[i] != 0:
+            i += 1
+            n_iter += 1
+        if i < sqt:
+            inter += (i-il) * const
+            k = int(round(inter))
+            r4 = (r4 + i - il) % 8
+            r5 = (r5 + i - il) % 8
+            r7 = (r7 + i - il) % 8
+            k = find_value(inter, r4, r5, r7)
+            il = i
+        else:
+            k = sqtn
 
-    if s2 != u and s3 == u:
-        s3 = s2
-        d3 = d2
-        k3 = k2
-    del s2, d2, k2
+        sys.stdout.write("done (%d)\n" % n_iter)
+        iter_tot += n_iter
 
-    while s3 != u:
-        try:
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-            a[find_index(s3)] = 1
-            a[find_index(s3 + d3)] = 1
-            s3 += k3 << 1
-        except IndexError:
-            k3o = k3
-            po = p + 1
-            k3, d3, s3, p = find_next(p, sqrt, a, usqrt)
-            iter += p - po
-            if k3 >= sqrt:
-                print("%d... done" % k3o)
-                s3 = u
-            else:
-                print("%d -> %d" % (k3o, k3))
-                a[find_index(s3)] = 1
-                a[find_index(s3 + d3)] = 1
-                s3 += k3 << 1
-            del k3o, po
-        iter += 1
-
-    del s3, d3, k3
-
-    print("\n%15d %5.5f %20d\n" % (n, time.time() - start, iter))
+    print("\n%15d %5.5f %20d\n" % (u, (time.time() - start), iter_tot))
+    del data
 
     sys.stdout.write("Scrittura... "), sys.stdout.flush()
     s = 1
@@ -320,7 +284,7 @@ if __name__ == "__main__":
     out = open("soluz.txt", "w")
     cont1 = 0
     cont0 = 0
-    for i in range(u):
+    for i in range(n):
         if a[i] == 0:
             if cont1 == 0:
                 if cont0 != 0:

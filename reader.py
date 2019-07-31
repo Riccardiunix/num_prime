@@ -3,7 +3,6 @@ import zlib, base64
 inp = open("soluz2.txt", "r")
 
 data = inp.readline()
-print(data[0])
 
 if data[0] == "1":
     decompress = zlib.decompressobj()
