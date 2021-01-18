@@ -101,12 +101,13 @@ if __name__ == "__main__":
     s23, i23 = 5, 1
     s29, i29 = 6, 1
     s31, i31 = 7, 1
+    maxR = 18
 
     sys.stdout.write("7, 11, 13, 17, 19, 23, 29, 31... "), sys.stdout.flush()
     while i7 or i11 or i13 or i17 or i23 or i29 or i31:
-        if i7:
-            try:
-                for i in range(18):
+        for i in range(maxR):
+            if i7:
+                try:
                     a[s7+12] = 1
                     a[s7+19] = 1
                     a[s7+23] = 1
@@ -114,14 +115,13 @@ if __name__ == "__main__":
                     a[s7+34] = 1
                     a[s7+41] = 1
                     a[s7+53] = 1
-                    a[s7+56] = 1
                     s7 += 56
-            except IndexError:
-                del s7
-                i7 = 0
-        if i11:
-            try:
-                for i in range(12):
+                    a[s7] = 1
+                except IndexError:
+                    del s7
+                    i7 = 0
+            if i11:
+                try:
                     a[s11+18] = 1
                     a[s11+30] = 1
                     a[s11+36] = 1
@@ -129,101 +129,110 @@ if __name__ == "__main__":
                     a[s11+53] = 1
                     a[s11+65] = 1
                     a[s11+83] = 1
-                    a[s11+88] = 1
                     s11 += 88
-            except IndexError:
-                del s11
-                i11 = 0
+                    a[s11] = 1
+                except IndexError:
+                    del s11
+                    i11 = 0
         if i13:
             try:
-                for i in range(10):
-                    a[s13+21] = 1
-                    a[s13+35] = 1
-                    a[s13+42] = 1
-                    a[s13+55] = 1
-                    a[s13+62] = 1
-                    a[s13+76] = 1
-                    a[s13+97] = 1
-                    a[s13+104] = 1
-                    s13 += 104
+                a[s13+21] = 1
+                a[s13+35] = 1
+                a[s13+42] = 1
+                a[s13+55] = 1
+                a[s13+62] = 1
+                a[s13+76] = 1
+                a[s13+97] = 1
+                s13 += 104
+                a[s13] = 1
             except IndexError:
                 del s13
                 i13 = 0
         if i17:
             try:
-                for i in range(8):
-                    a[s17+27] = 1
-                    a[s17+45] = 1
-                    a[s17+54] = 1
-                    a[s17+73] = 1
-                    a[s17+82] = 1
-                    a[s17+100] = 1
-                    a[s17+127] = 1
-                    a[s17+136] = 1
-                    s17 += 136
+                a[s17+27] = 1
+                a[s17+45] = 1
+                a[s17+54] = 1
+                a[s17+73] = 1
+                a[s17+82] = 1
+                a[s17+100] = 1
+                a[s17+127] = 1
+                s17 += 136
+                a[s17] = 1
             except IndexError:
                 del s17
                 i17 = 0
         if i19:
             try:
-                for i in range(7):
-                    a[s19+30] = 1
-                    a[s19+50] = 1
-                    a[s19+60] = 1
-                    a[s19+81] = 1
-                    a[s19+91] = 1
-                    a[s19+111] = 1
-                    a[s19+141] = 1
-                    a[s19+152] = 1
-                    s19 += 152
+                a[s19+30] = 1
+                a[s19+50] = 1
+                a[s19+60] = 1
+                a[s19+81] = 1
+                a[s19+91] = 1
+                a[s19+111] = 1
+                a[s19+141] = 1
+                s19 += 152
+                a[s19] = 1
             except IndexError:
                 del s19
                 i19 = 0
         if i23:
             try:
-                for i in range(6):
-                    a[s23+36] = 1
-                    a[s23+61] = 1
-                    a[s23+73] = 1
-                    a[s23+98] = 1
-                    a[s23+110] = 1
-                    a[s23+135] = 1
-                    a[s23+171] = 1
-                    a[s23+184] = 1
-                    s23 += 184
+                a[s23+36] = 1
+                a[s23+61] = 1
+                a[s23+73] = 1
+                a[s23+98] = 1
+                a[s23+110] = 1
+                a[s23+135] = 1
+                a[s23+171] = 1
+                s23 += 184
+                a[s23] = 1
             except IndexError:
                 del s23
                 i23 = 0
         if i29:
             try:
-                for i in range(5):
-                    a[s29+47] = 1
-                    a[s29+78] = 1
-                    a[s29+93] = 1
-                    a[s29+124] = 1
-                    a[s29+139] = 1
-                    a[s29+170] = 1
-                    a[s29+217] = 1
-                    a[s29+232] = 1
-                    s29 += 232
+                a[s29+47] = 1
+                a[s29+78] = 1
+                a[s29+93] = 1
+                a[s29+124] = 1
+                a[s29+139] = 1
+                a[s29+170] = 1
+                a[s29+217] = 1
+                s29 += 232
+                a[s29] = 1
             except IndexError:
                 del s29
                 i29 = 0
         if i31:
             try:
-                for i in range(4):
-                    a[s31+49] = 1
-                    a[s31+82] = 1
-                    a[s31+99] = 1
-                    a[s31+132] = 1
-                    a[s31+149] = 1
-                    a[s31+182] = 1
-                    a[s31+231] = 1
-                    a[s31+248] = 1
-                    s31 += 248
+                a[s31+49] = 1
+                a[s31+82] = 1
+                a[s31+99] = 1
+                a[s31+132] = 1
+                a[s31+149] = 1
+                a[s31+182] = 1
+                a[s31+231] = 1
+                s31 += 248
+                a[s31] = 1
             except IndexError:
                 del s31
                 i31 = 0
+        
+        if not i11:
+            maxR = 12
+        elif not i13:
+            maxR  = 10
+        elif not i17:
+            maxR  = 8
+        elif not i19:
+            maxR  = 7
+        elif not i23:
+            maxR  = 6
+        elif not i29:
+            maxR  = 5
+        elif not i31:
+            maxR  = 4
         iter_tot[0] += 1
     del i7, i11, i13, i17, i19, i23, i29, i31
     sys.stdout.write("done (%d)\n" % iter_tot[0])
@@ -254,7 +263,7 @@ if __name__ == "__main__":
         try:
             for add in data:
                 a[s + add] = 1
-            s += data[-1]
+            s += data[7]
         except IndexError:
             i += 1
             while i < sqt and a[i] != 0:
@@ -269,7 +278,7 @@ if __name__ == "__main__":
                 k = find_value(inter, r4, r5, r7)
                 print("%d -> %d" % (ko, k))
                 data = fix_data(k, i, iter_tot)
-                s = i + data[-1]
+                s = i + data[7]
                 il = i
             else:
                 s = sqtn
@@ -277,7 +286,7 @@ if __name__ == "__main__":
         try:
             for add in data1:
                 a[s1 + add] = 1
-            s1 += data1[-1]
+            s1 += data1[7]
         except IndexError:
             i += 1
             while i < sqt and a[i] != 0:
@@ -292,7 +301,7 @@ if __name__ == "__main__":
                 k1 = find_value(inter, r4, r5, r7)
                 print("%d -> %d" % (ko, k1))
                 data1 = fix_data(k1, i, iter_tot)
-                s1 = i + data1[-1]
+                s1 = i + data1[7]
                 il = i
             else:
                 s1 = sqtn
@@ -300,7 +309,7 @@ if __name__ == "__main__":
         try:
             for add in data2:
                 a[s2 + add] = 1
-            s2 += data2[-1]
+            s2 += data2[7]
         except IndexError:
             i += 1
             while i < sqt and a[i] != 0:
@@ -315,7 +324,7 @@ if __name__ == "__main__":
                 k2 = find_value(inter, r4, r5, r7)
                 print("%d -> %d" % (ko, k2))
                 data2 = fix_data(k2, i, iter_tot)
-                s2 = i + data2[-1]
+                s2 = i + data2[7]
                 il = i
             else:
                 s2 = sqtn
@@ -333,7 +342,7 @@ if __name__ == "__main__":
         try:
             for add in data:
                 a[s + add] = 1
-            s += data[-1]
+            s += data[7]
         except IndexError:
             i += 1
             while i < sqt and a[i] != 0:
@@ -348,7 +357,7 @@ if __name__ == "__main__":
                 k = find_value(inter, r4, r5, r7)
                 print("%d -> %d" % (ko, k))
                 data = fix_data(k, i, iter_tot)
-                s = i + data[-1]
+                s = i + data[7]
                 il = i
             else:
                 s = sqtn
@@ -371,7 +380,7 @@ if __name__ == "__main__":
                 k1 = find_value(inter, r4, r5, r7)
                 print("%d -> %d" % (ko, k1))
                 data1 = fix_data(k1, i, iter_tot)
-                s1 = i + data1[-1]
+                s1 = i + data1[7]
                 il = i
             else:
                 s1 = sqtn
